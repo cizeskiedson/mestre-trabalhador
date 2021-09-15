@@ -119,6 +119,7 @@ int main(int argc, char *argv[]){
           //  handle_error_en(s, "pthread_join");
     }
     printf("Encerrando programa...\n");
+    printf("Resultado final: %ld %ld %ld %ld\n", soma, impar, minimo, maximo);
     exit(EXIT_SUCCESS);
 }
 
@@ -187,7 +188,7 @@ static void *mestre(){
         }
         pthread_mutex_unlock(&lock_mestre);
         printf("Executou mestre\n");
-        pthread_cond_signal(&cond_trabalhador); //acordar trabalhadores ociosos
+        pthread_cond_broadcast(&cond_trabalhador); //acordar trabalhadores ociosos
         i+=1;
     }while(!acabou_programa); //espera a fila acabar ativando as threads conforme precisar
     printf("Terminou mestre\n");
@@ -207,7 +208,9 @@ static void *trabalhador(){
             pthread_cond_wait(&cond_trabalhador, &lock_trabalhador);
             ativo = true;
             if(acabou_programa){
-               return 0;
+               printf("Encerrando fluxo do trabalhador...\n");
+               pthread_mutex_unlock(&lock_trabalhador);
+               return(0);
             }
         } //se chegou aqui, pode puxar uma tarefa e executar
         no = cabeca->prox;
