@@ -55,7 +55,7 @@ int main(int argc, char* argv[])
     while (fscanf(fin, "%c %ld\n", &action, &num) == 2) {
         if (action == 'p') {            // process
             update(num);
-        } else if (action == 'w') {     // wait
+        } else if (action == 'e') {     // wait
             sleep(num);
         } else {
             printf("ERROR: Unrecognized action: '%c'\n", action);
